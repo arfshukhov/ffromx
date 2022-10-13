@@ -25,7 +25,7 @@ class Graph:
         self.plt.setYRange(-range, range)
         self.plt.setWindowTitle('pyqtgraph plot')
 
-        self.plt.plot(self.x, self. y)
+        #self.plt.plot(self.x, self. y)
 
 
 class Window(QWidget):

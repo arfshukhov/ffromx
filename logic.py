@@ -8,8 +8,8 @@ def symbol_add(symbol: str, place):
 
 def execution(place, range_: int):
     expression = str(place.text())
-    expression=expression.replace("√", "sqrt")
-    expression=expression.replace("sqr", "pow")
+    expression = expression.replace("√", "sqrt")
+    expression = expression.replace("sqr", "pow")
     y_data = []
     for i in range(-range_, range_+1):
 
@@ -19,6 +19,7 @@ def execution(place, range_: int):
             place.setText("You can not divide by zero!")
         except SyntaxError:
             place.setText("Invalid sintax. Check your expression...")
+
 
 def break_expression(place):
     place.setText("")
