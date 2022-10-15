@@ -14,13 +14,15 @@ def execution(place, range_space, graph):
     expression = expression.replace("sqr", "pow")
     x_data = []
     y_data = []
-    range_ = int(range_space.text())
+    range_ = int(range_space.text())*10
     graph.setLimits(xMin=-range_, xMax=range_,
                              yMin=-range_, yMax=range_)
     print(range_)
     for i in range(-range_, range_+1):
         print(i)
+
         try:
+            i /= 10
             exp = expression.replace("x", str(i))
             #print("exp=", exp)
             #(exec(f"from math import *; x_data.append(i); y_data.append({exp})"))
@@ -29,20 +31,20 @@ def execution(place, range_space, graph):
             y_data.append(res)
             print(x_data[-1], y_data[-1])
         except ZeroDivisionError:
-            #g1 = graph.plot(x_data, y_data)
-            #x_data, y_data = [], []
-            #print("!!")
+            g1 = graph.plot(x_data, y_data)
+            x_data, y_data = [], []
+            print("!!")
             continue
         except ValueError:
-            #g2 = graph.plot(x_data, y_data)
-            #x_data, y_data = [], []
-            #print("!!")
+            graph.plot(x_data, y_data)
+            x_data, y_data = [], []
+            print("!!")
             continue
         except SyntaxError:
             place.setText("Invalid sintax. Check your expression...")
             break
     #print(x_data, y_data)
-    g3 = graph.plot(x_data, y_data)
+    graph.plot(x_data, y_data)
     #print(1323333)
 
 def break_expression(place):
