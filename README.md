@@ -4,4 +4,5 @@
 <p><span style="color: #0000ff; background-color: #ccffcc;">Sintax like in deafaul windows calaulator</span></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-![image](https://user-images.githubusercontent.com/81926456/196057427-37966b66-f7b7-4391-b767-1c9c91c19a1b.png)
+![image](https://user-images.githubusercontent.com/81926456/196057454-9b5ed97e-5d0b-4041-8745-c36529a4fed5.png)
+
