@@ -22,6 +22,9 @@ class Style:
                     font: bold 14px;min-width: 3em; padding: 1px; color: #212121;}"""
     label = """background-color: green; border-radius: 10px; font: bold 14px;
                                         min-width: 3em; padding: 1px; color: white;"""
+    entry_space = """background-color: gray; border-radius: 5px; min-width: 3em; color:
+                    white; selection-color: yellow; selection-background-color: blue;"""
+
 
 
 class Button(QPushButton):
@@ -53,64 +56,68 @@ class ButtonsTable:
              Button("√", symbol_add, "√()", place).button],
 
             [NotImplemented, Button("0", symbol_add, "0", place).button,
-             Button("X", symbol_add, "x", place), Button("(", symbol_add, "(", place).button,
+             Button("X", symbol_add, "x", place).button, Button("(", symbol_add, "(", place).button,
              Button(")", symbol_add, ")", place).button],
 
         ]
 
 
 class Graph:
-    def __init__(self, range: int, x: list, y: list, ):
+    def __init__(self):
         super().__init__()
 
-        self.x = x
-        self.y = y
 
         self.plt = pg.plot()
         self.plt.showGrid(x=True,y=True)
 
         self.plt.setLabel('left', 'Axis', units='y')
         self.plt.setLabel('bottom', 'Axis', units='x')
+        self.plt.setLabel('right', 'Axis', units='y')
+        self.plt.setLabel('top', 'Axis', units='x')
 
         range_ = self.plt.getViewBox().viewRange()
         self.plt.setLimits(xMin=-100, xMax=100,
                              yMin=-100, yMax=100)
 
-        self.plt.setWindowTitle('pyqtgraph plot')
-
-
 class Window(QWidget):
     def __init__(self, graphic):
         super().__init__()
 
-
-
         self.setGeometry(100, 100, 1100, 800)
         self.setStyleSheet(Style.background)
+        self.setWindowTitle("ffromx - plotting graphs")
+        self.icon = QIcon()
+        self.icon.addPixmap(QPixmap("hello_html_m2d4d9fc4.png"))
+        self.setWindowIcon(self.icon)
 
         self.range_label = QLabel("range of x", self)
-        self.range_label.setGeometry(710, 500, 180, 50)
+        self.range_label.setGeometry(710, 50, 180, 20)
+        self.range_label.setStyleSheet(Style.label)
 
         self.range_space = QLineEdit(self)
-        self.range_space.setGeometry(790, 500, 120, 50)
+        self.range_space.setGeometry(790, 50, 120, 20)
+        self.range_space.setStyleSheet(Style.entry_space)
 
         self.y_exp = QLabel("y = ", self)
-        self.y_exp.setGeometry(710, 10, 180, 50)
+        self.y_exp.setGeometry(710, 25, 15, 20)
+        self.y_exp.setStyleSheet(Style.label)
 
         self.exp_space = QLineEdit(self)
-        self.exp_space.setGeometry(735, 25, 300, 20)
+        self.exp_space.setGeometry(737, 25, 300, 20)
+        self.exp_space.setStyleSheet(Style.entry_space)
 
 
         self.draw_button = QPushButton("draw", self)
-        self.draw_button.setGeometry(1000,10,50,30)
+        self.draw_button.setGeometry(1040, 20,50,30)
         self.draw_button.clicked.connect(partial(execution, self.exp_space, self.range_space, graphic))
+        self.draw_button.setStyleSheet(Style.button_style)
 
         self.lay = QVBoxLayout(self)
         self.lay.addWidget(graphic)
 
         self.graph_widget = QWidget(self)
         self.graph_widget.setLayout(self.lay)
-        self.graph_widget.setGeometry(10,10,700,700)
+        self.graph_widget.setGeometry(10,10,700,780)
 
 
 
@@ -120,7 +127,7 @@ class Main(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.graph = Graph(50, [1, 2, 3, 4, 5], [1, 4, 9, 16, 25]).plt
+        self.graph = Graph().plt
 
         self.window = Window(graphic=self.graph)
 
@@ -128,7 +135,7 @@ class Main(QWidget):
 
         self.lay = QWidget(self.window)
         self.lay.setLayout(self.grid)
-        self.lay.setGeometry(710, 80, 390, 320)
+        self.lay.setGeometry(710, 70, 390, 320)
 
         self.buttons = ButtonsTable(self.window.exp_space).buttons
 
@@ -136,7 +143,6 @@ class Main(QWidget):
             for k, d in enumerate(m):
                 if (i + 1, k + 1) == (5, 1):
                     self.btn1 = QPushButton("CE")
-                    # self.btn1.sizePolicy.setVerticalStretch()
                     self.btn1.clicked.connect(partial(break_expression, self.window.exp_space))
                     self.grid.addWidget(self.btn1, i + 1, k + 1)
                     self.btn1.setStyleSheet(Style.button_style)

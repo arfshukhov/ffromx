@@ -1,4 +1,10 @@
 from math import *
+from lupa import LuaRuntime
+import time
+
+from asyncio import *
+
+lua = LuaRuntime()
 
 def symbol_add(symbol: str, place):
     pos = place.cursorPosition()
@@ -8,44 +14,58 @@ def symbol_add(symbol: str, place):
     place.setCursorPosition(pos+1)
 
 
-def execution(place, range_space, graph):
-    expression = str(place.text())
-    expression = expression.replace("√", "pow")
-    expression = expression.replace("sqr", "pow")
+async def generate_coords(place, range_, graph, expression):
     x_data = []
     y_data = []
-    range_ = int(range_space.text())*10
-    graph.setLimits(xMin=-range_, xMax=range_,
-                             yMin=-range_, yMax=range_)
-    print(range_)
-    for i in range(-range_, range_+1):
-        print(i)
-
+    for i in range(range_, range_+11):
         try:
-            i /= 10
+            i = i/10
+            print(i)
             exp = expression.replace("x", str(i))
-            #print("exp=", exp)
-            #(exec(f"from math import *; x_data.append(i); y_data.append({exp})"))
+
             res = eval(exp)
             x_data.append(i)
             y_data.append(res)
-            print(x_data[-1], y_data[-1])
+            #print(x_data[-1], y_data[-1])
         except ZeroDivisionError:
             g1 = graph.plot(x_data, y_data)
             x_data, y_data = [], []
-            print("!!")
+            #print("!")
             continue
         except ValueError:
             graph.plot(x_data, y_data)
             x_data, y_data = [], []
-            print("!!")
+            #print("!!")
             continue
         except SyntaxError:
             place.setText("Invalid sintax. Check your expression...")
             break
-    #print(x_data, y_data)
-    graph.plot(x_data, y_data)
-    #print(1323333)
+    else:
+        graph.plot(x_data, y_data)
+
+def execution(place, range_space, graph):
+
+    expression = str(place.text())
+    expression = expression.replace("√", "pow")
+    expression = expression.replace("sqr", "pow")
+    expression = expression.replace("tg", "tan")
+    x_data = []
+    y_data = []
+    range_: int = 0
+    t1 = time.time()
+    try:
+        range_ = int(range_space.text())*10
+        range__ = [i for i in range(-range_, range_)]
+    except:
+        place.setText("range of x is empty")
+    graph.setLimits(xMin=-range_, xMax=range_,
+                    yMin=-range_, yMax=range_)
+    ioloop = get_event_loop()
+    for i in range(-range_-10, range_-10, 10):
+
+        ioloop.run_until_complete(generate_coords(place, i+10, graph, expression))
+
+
 
 def break_expression(place):
     place.setText("")
