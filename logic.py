@@ -2,7 +2,7 @@ from math import *
 from lupa import LuaRuntime
 import time
 
-from asyncio import *
+import asyncio
 
 lua = LuaRuntime()
 
@@ -13,6 +13,11 @@ def symbol_add(symbol: str, place):
     place.setText("".join(text))
     place.setCursorPosition(pos+1)
 
+async def empty_x_range(place, expression):
+    place.setText("range of x is empty")
+    time.sleep(3)
+    place.setText(expression)
+
 
 async def generate_coords(place, range_, graph, expression):
     x_data = []
@@ -20,7 +25,6 @@ async def generate_coords(place, range_, graph, expression):
     for i in range(range_, range_+11):
         try:
             i = i/10
-            print(i)
             exp = expression.replace("x", str(i))
 
             res = eval(exp)
@@ -44,7 +48,7 @@ async def generate_coords(place, range_, graph, expression):
         graph.plot(x_data, y_data)
 
 def execution(place, range_space, graph):
-
+    ioloop = asyncio.get_event_loop()
     expression = str(place.text())
     expression = expression.replace("√", "pow")
     expression = expression.replace("sqr", "pow")
@@ -57,10 +61,10 @@ def execution(place, range_space, graph):
         range_ = int(range_space.text())*10
         range__ = [i for i in range(-range_, range_)]
     except:
-        place.setText("range of x is empty")
+        range_space.setText("range of x is empty")
+        pass
     graph.setLimits(xMin=-range_, xMax=range_,
-                    yMin=-range_, yMax=range_)
-    ioloop = get_event_loop()
+                    yMin=-range_*1.5, yMax=range_*1.5)
     for i in range(-range_-10, range_-10, 10):
 
         ioloop.run_until_complete(generate_coords(place, i+10, graph, expression))

@@ -120,8 +120,6 @@ class Window(QWidget):
         self.graph_widget.setGeometry(10,10,700,780)
 
 
-
-
 class Main(QWidget):
 
     def __init__(self):
