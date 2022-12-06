@@ -85,7 +85,7 @@ class Window(QWidget):
 
         self.setGeometry(100, 100, 1100, 800)
         self.setStyleSheet(Style.background)
-        self.setWindowTitle("ffromx - plotting graphs")
+        self.setWindowTitle("ffromx - plotting graphs by Larionov software")
         self.icon = QIcon()
         self.icon.addPixmap(QPixmap("hello_html_m2d4d9fc4.png"))
         self.setWindowIcon(self.icon)
@@ -106,10 +106,15 @@ class Window(QWidget):
         self.exp_space.setGeometry(737, 25, 300, 20)
         self.exp_space.setStyleSheet(Style.entry_space)
 
+        self.error_label = QTextEdit(self)
+        self.error_label.setStyleSheet(Style.label)
+        self.error_label.setGeometry(720, 400, 370, 300)
 
         self.draw_button = QPushButton("draw", self)
         self.draw_button.setGeometry(1040, 20,50,30)
-        self.draw_button.clicked.connect(partial(execution, self.exp_space, self.range_space, graphic))
+        self.draw_button.clicked.connect(partial(
+            execution, self.exp_space, self.range_space, graphic, self.error_label
+        ))
         self.draw_button.setStyleSheet(Style.button_style)
 
         self.lay = QVBoxLayout(self)
@@ -150,7 +155,6 @@ class Main(QWidget):
                     d.resize(50, 50)
                     self.grid.addWidget(d, i + 1, k + 1)
 
-        print(self.window.__dict__.values())
         self.window.show()
 
 
