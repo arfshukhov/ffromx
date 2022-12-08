@@ -1,10 +1,9 @@
 from math import *
-from lupa import LuaRuntime
 import time
 
 import asyncio
 
-lua = LuaRuntime()
+import sys
 
 def symbol_add(symbol: str, place):
     pos = place.cursorPosition()
@@ -19,7 +18,7 @@ async def empty_x_range(place, expression):
     place.setText(expression)
 
 
-async def generate_coords(place, range_, graph, expression, err_place):
+async def generate_coords(place, range_, graph, expression):
     x_data = []
     y_data = []
     for i in range(range_, range_+11):
@@ -44,14 +43,10 @@ async def generate_coords(place, range_, graph, expression, err_place):
         except SyntaxError:
             place.setText("Invalid sintax. Check your expression...")
             break
-        except Exception as e:
-            err_text = err_place.toPlainText()
-            err_place.setText("\n".join([err_text, str(e)]))
-            break
     else:
         graph.plot(x_data, y_data)
 
-def execution(place, range_space, graph, err_place):
+def execution(place, range_space, graph, log_place):
     ioloop = asyncio.get_event_loop()
     expression = str(place.text())
     expression = expression.replace("√", "pow")
@@ -69,10 +64,17 @@ def execution(place, range_space, graph, err_place):
         pass
     graph.setLimits(xMin=-range_, xMax=range_,
                     yMin=-range_*1.5, yMax=range_*1.5)
-    for i in range(-range_-10, range_-10, 10):
-
-        ioloop.run_until_complete(generate_coords(place, i+10, graph, expression, err_place))
-
+    try:
+        for i in range(-range_-10, range_-10, 10):
+            ioloop.run_until_complete(generate_coords(place, i+10, graph, expression))
+    except Exception as e:
+        err_text = str(e)
+        log_text = log_place.toPlainText()
+        log_place.setText("\n".join([log_text, err_text]))
+    else:
+        exp_text = str(place.text())
+        log_text = log_place.toPlainText()
+        log_place.setText("\n".join([log_text, "y="+exp_text]))
 
 
 def break_expression(place):

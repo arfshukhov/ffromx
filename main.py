@@ -106,14 +106,15 @@ class Window(QWidget):
         self.exp_space.setGeometry(737, 25, 300, 20)
         self.exp_space.setStyleSheet(Style.entry_space)
 
-        self.error_label = QTextEdit(self)
-        self.error_label.setStyleSheet(Style.label)
-        self.error_label.setGeometry(720, 400, 370, 300)
+        self.log_label = QTextEdit(self)
+        self.log_label.setStyleSheet(Style.label)
+        self.log_label.setGeometry(720, 400, 370, 300)
+        self.log_label.setText("Log of expressions:\n")
 
         self.draw_button = QPushButton("draw", self)
         self.draw_button.setGeometry(1040, 20,50,30)
         self.draw_button.clicked.connect(partial(
-            execution, self.exp_space, self.range_space, graphic, self.error_label
+            execution, self.exp_space, self.range_space, graphic, self.log_label
         ))
         self.draw_button.setStyleSheet(Style.button_style)
 
