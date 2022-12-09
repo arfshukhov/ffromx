@@ -29,7 +29,6 @@ async def generate_coords(place, range_, graph, expression):
             res = eval(exp)
             x_data.append(i)
             y_data.append(res)
-            #print(x_data[-1], y_data[-1])
         except ZeroDivisionError:
             g1 = graph.plot(x_data, y_data)
             x_data, y_data = [], []
@@ -38,20 +37,23 @@ async def generate_coords(place, range_, graph, expression):
         except ValueError:
             graph.plot(x_data, y_data)
             x_data, y_data = [], []
-            #print("!!")
             continue
-        except SyntaxError:
-            place.setText("Invalid sintax. Check your expression...")
-            break
     else:
         graph.plot(x_data, y_data)
 
+
+def processing_expression(expression):
+    expression = expression.replace("arcctg", "atan2")
+    expression = expression.replace("arc", "a")
+    expression = expression.replace("sqr", "pow")
+    expression = expression.replace("√", "sqrt")
+    expression = expression.replace("tg", "tan")
+
+    return expression
+
 def execution(place, range_space, graph, log_place):
     ioloop = asyncio.get_event_loop()
-    expression = str(place.text())
-    expression = expression.replace("√", "pow")
-    expression = expression.replace("sqr", "pow")
-    expression = expression.replace("tg", "tan")
+    expression = processing_expression(str(place.text()))
     x_data = []
     y_data = []
     range_: int = 0
@@ -67,6 +69,18 @@ def execution(place, range_space, graph, log_place):
     try:
         for i in range(-range_-10, range_-10, 10):
             ioloop.run_until_complete(generate_coords(place, i+10, graph, expression))
+    except SyntaxError as e:
+        err_text = str(e)
+        log_text = log_place.toPlainText()
+        log_place.setText("\n".join([log_text, err_text]))
+    except NameError as e:
+        err_text = str(e)
+        log_text = log_place.toPlainText()
+        log_place.setText("\n".join([log_text, err_text]))
+    except TypeError as e:
+        err_text = str(e)
+        log_text = log_place.toPlainText()
+        log_place.setText("\n".join([log_text, err_text]))
     except Exception as e:
         err_text = str(e)
         log_text = log_place.toPlainText()
