@@ -64,7 +64,7 @@ def execution(place, range_space, graph, log_place):
     except:
         range_space.setText("range of x is empty")
         pass
-    graph.setLimits(xMin=-range_, xMax=range_,
+    graph.setLimits(xMin=-range_*1.5, xMax=range_*1.5,
                     yMin=-range_*1.5, yMax=range_*1.5)
     try:
         for i in range(-range_-10, range_-10, 10):

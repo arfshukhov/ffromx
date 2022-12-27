@@ -79,6 +79,7 @@ class Graph:
         self.plt.setLabel('bottom', 'Axis', units='x')
         self.plt.setLabel('right', 'Axis', units='y')
         self.plt.setLabel('top', 'Axis', units='x')
+        self.plt.setAspectLocked()
 
         range_ = self.plt.getViewBox().viewRange()
         self.plt.setLimits(xMin=-100, xMax=100,
@@ -129,7 +130,7 @@ class Window(QWidget):
 
         self.graph_widget = QWidget(self)
         self.graph_widget.setLayout(self.lay)
-        self.graph_widget.setGeometry(SYS_W/192, SYS_H/108, SYS_W/2.7428, SYS_H/1.385)
+        self.graph_widget.setGeometry(SYS_W/192, SYS_H/108, SYS_W/2.7428, SYS_H/1.5428)#SYS_W/2.7428, SYS_H/1.385
 
 
 class Main(QWidget):
