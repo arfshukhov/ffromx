@@ -23,7 +23,7 @@ async def generate_coords(place, range_, graph, expression):
     y_data = []
     for i in range(range_, range_+11):
         try:
-            i = i/10
+            i = i/50
             exp = expression.replace("x", str(i))
 
             res = eval(exp)
@@ -59,7 +59,7 @@ def execution(place, range_space, graph, log_place):
     range_: int = 0
     t1 = time.time()
     try:
-        range_ = int(range_space.text())*10
+        range_ = int(range_space.text())*50
         range__ = [i for i in range(-range_, range_)]
     except:
         range_space.setText("range of x is empty")
@@ -67,8 +67,8 @@ def execution(place, range_space, graph, log_place):
     graph.setLimits(xMin=-range_*1.5, xMax=range_*1.5,
                     yMin=-range_*1.5, yMax=range_*1.5)
     try:
-        for i in range(-range_-10, range_-10, 10):
-            ioloop.run_until_complete(generate_coords(place, i+10, graph, expression))
+        for i in range(-range_-50, range_-50, 10):
+            ioloop.run_until_complete(generate_coords(place, i+50, graph, expression))
     except SyntaxError as e:
         err_text = str(e)
         log_text = log_place.toPlainText()
